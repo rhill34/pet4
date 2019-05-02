@@ -34,7 +34,7 @@ $f3->set('DEBUG', 3);
 //Define a default route
 $f3->route('GET /', function()
 {
-    echo"<h1>my Pets</h1><br><p><a href='order'>Order a pet</a></p>";
+    echo "<h1>my Pets</h1><br><p><a href='order'>Order a pet</a></p>";
 //    //Display a view
 //    $view = new Template();
 //    echo $view->render('views/home.html');
@@ -43,15 +43,36 @@ $f3->route('GET /', function()
 
 $f3->route('GET|POST /order',
     function($f3){
-    if(isset($_POST['animal'])) {
+
+    $animal = null;
+    $qty = null;
+
+    if(!empty($_POST))
+    {
         $animal = $_POST['animal'];
-        if(validText($animal)){
+        $qty = $_POST['qty'];
+
+        //Add data to hive
+        $f3->set('animal', $animal);
+        $f3->set('qty', $qty);
+
+        if(validText($animal) && (validQty($qty)))
+        {
             $_SESSION['animal'] = $animal;
             $f3->reroute('/order2');
-        }else {
+        }
+
+        if (!validText($animal))
+        {
             $f3->set("errors['animal']", "Please enter a valid animal.");
         }
+
+        if(!validQty($qty))
+        {
+            $f3->set("errors['qty']", "Please enter a valid quantity");
+        }
     }
+
     //Display a view
     $view = new Template();
     echo $view->render('views/form1.html');
