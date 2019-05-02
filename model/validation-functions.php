@@ -1,5 +1,6 @@
 <?php
 
+
 function validColor($color)
 {
     global $f3;
@@ -8,5 +9,9 @@ function validColor($color)
 
 function validText( $string )
 {
-    return (!empty($string) && preg_match('/^[A-Za-z]/', $string));
+    return (!empty($string) && ctype_alpha($string));
+}
+function validQty($qty)
+{
+    return (!empty($qty) && is_numeric($qty) && $qty >= 1);
 }
