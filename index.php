@@ -27,6 +27,7 @@ require_once ('model/validation-functions.php');
 //Create an instance of the Base class
 $f3 = Base::instance();
 $f3->set('colors', array('pink', 'green', 'blue'));
+$f3->set('act', array('run', 'jump','kick', 'punch', 'yoga', 'eat'));
 
 //Turn on Fat-Free error reporting
 $f3->set('DEBUG', 3);
@@ -59,6 +60,7 @@ $f3->route('GET|POST /order',
         if(validText($animal) && (validQty($qty)))
         {
             $_SESSION['animal'] = $animal;
+            $_SESSION['qty'] = $qty;
             $f3->reroute('/order2');
         }
 
@@ -80,19 +82,42 @@ $f3->route('GET|POST /order',
 });
 
 $f3->route('GET|POST /order2',
-      function($f3){
-        if(isset($_POST['color'])) {
-            $color = $_POST['color'];
-            if(validColor($color)){
-                $_SESSION['color'] = $color;
-                $f3->reroute('/results');
-            }else {
-                $f3->set("errors['color']", "Please enter a color.");
-            }
+    function ($f3){
+
+    $color = null;
+    $act = null;
+
+    if(!empty($_POST))
+    {
+
+        //Add to variable
+        $color = $_POST['color'];
+        $act = $_POST['act'];
+
+        //Add to hive
+        $f3->set('color',$color);
+        $f3->set('act', $act);
+
+        if(validColor($color) && validCheck($act))
+        {
+            $_SESSION['color'] = $color;
+            $_SESSION['act'] = $act;
+            $f3->reroute('/results');
         }
-          //Display a view
-          $view = new Template();
-          echo $view->render('views/form2.html');
+
+        if(!validColor($color))
+        {
+            $f3->set("errors['color']", "Please enter a color.");
+        }
+
+//        if(!validCheck($act))
+//        {
+//            $f3->set("errors['act']", "Please select from the activities. Your pet can't do what you chose!");
+//        }
+    }
+    //Display a view
+    $view = new Template();
+    echo $view->render('views/form2.html');
 });
 //Define a Lunch route with a parameter
 $f3->route('GET /@animal', function($f3,$params)
@@ -125,6 +150,14 @@ $f3->route('GET /@animal', function($f3,$params)
     }
 });
 
+$f3->route('GET /old', function()
+{
+    //    $_SESSION['color'] = $_POST['color'];
+//    print_r($_SESSION);
+    //Display a view
+    $view = new Template();
+    echo $view->render('views/form3.html');
+});
 $f3->route('GET|POST /results', function()
 {
 //    $_SESSION['color'] = $_POST['color'];

@@ -15,3 +15,9 @@ function validQty($qty)
 {
     return (!empty($qty) && is_numeric($qty) && $qty >= 1);
 }
+function validCheck($act)
+{
+//    global $f3;
+//    return (!empty($f3->get('act') && in_array($act, $f3->get('act'))));
+    return true;
+}

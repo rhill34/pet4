@@ -40,7 +40,34 @@
         </repeat>
     </select>
     </div>
-
+    <label class="col-sm-8 control-label" for="activity">Active Pet:
+        <p>
+            <check if="{{ @errors['act'] }}">
+                <span class="err">{{ @errors['act'] }}</span>
+            </check>
+        </p>
+    </label>
+    <div class="col-sm-8">
+        <hr id="activity">
+        <div class="container-fluid">
+            <div class="row">
+                <repeat group="{{ @act }}"
+                        key="{{ @acts }}"
+                        value="{{ @activity }}">
+                    <div class="form-check form-check-inline col">
+                        <label class="form-check-label">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   name="act[]"
+                                   value="{{ @activity }}">
+<!--                                   <check if="{{ !empty(@act) && in_array(@activity, @act) }}">-->
+<!--                                       checked="checked"-->
+<!--                                   </check>-->
+                            {{ @activity }}
+                        </label>
+                    </div>
+                </repeat>
+            </div>
         </div>
         <input type="submit" value="Next">
     </div>
