@@ -6,29 +6,45 @@
 </head>
 <body>
 <div class="col-sm-3">
-    <check if="{{ isset(@errors['color'])}}">
+    <check if="{{ !empty(@errors['color'])}}">
         <p>{{ @errors['color'] }}</p>
     </check>
 </div>
 <form action="#" method="post" class="form-horizontal">
     <label class="col-sm-1 control-label" for="color">Pet Color:</label>
     <div class="col-sm-3">
-    <select class="form-control" name="color" id="color">
+        <select class="form-control" name="color" id="color">
             <check if="{{ @errors['color']}}">
                 <p>{{@errors['color']}}</p>
             </check>
-        <option>--Select a color--</option>
-        <repeat group="{{ @colors }}"
-                key="{{ @colors }}"
-                value="{{ @colorOption }}">
-            <option>
-                <check if="{{ @colorOption == @color}}">selected</check>
-                {{ @colorOption }}
-            </option>
-        </repeat>
-    </select>
+            <option>--Select a color--</option>
+            <repeat group="{{ @colors }}"
+                    key="{{ @colors }}"
+                    value="{{ @colorOption }}">
+                <option>
+                    <check if="{{ @colorOption == @color}}">selected</check>
+                    {{ @colorOption }}
+                </option>
+            </repeat>
+        </select>
+        <p>
+            Select Activities:
+            <check if="{{ @errors['act'] }}">
+                <span class="err">{{ @errors['act'] }}</span>
+            </check>
+            <br>
+            <repeat group="{{ @activity }}" value="{{ @active }}">
+                <label>
+                    <input type="checkbox" name="act[]" value="{{ @active }}"
+                    <check if="{{ !empty($_POST['act']) && in_array(@active, $_POST['act']) }}">
+                        checked="checked"
+                    </check>
+                    >{{ @active }}
+                </label>
+                <br>
+            </repeat>
+        </p>
     </div>
-
     <input type="submit" value="Next">
 </form>
 </body>
